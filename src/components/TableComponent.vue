@@ -1,11 +1,9 @@
 <template>
   <table id="">
     <tr>
-      <th>{{ getmodified }}</th>
-      <th>text2</th>
-      <th>text3</th>
-      <th>text4</th>
-      <th>
+      <th>№</th>
+      <th>марка авто</th>
+      <!-- <th>
         <router-link to="/edit">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -44,31 +42,16 @@
             </g>
           </svg>
         </router-link>
-      </th>
+      </th> -->
     </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td>
-        <tr>
-          1
-        </tr>
-        <tr>
-          2
-        </tr>
-      </td>
-      <td></td>
+    <tr v-for="(row, index) in $store.state.rows" :key="index">
+      <td>{{ index + 1 }}</td>
+      <td>{{ row.mark }}</td>
     </tr>
   </table>
 </template>
 
-<script setup>
-import { defineProps } from "vue";
-
-defineProps({
-  getmodified: String,
-});
-</script>
+<script setup></script>
 
 <style scoped>
 table {
