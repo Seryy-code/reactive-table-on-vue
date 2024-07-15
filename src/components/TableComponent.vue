@@ -3,6 +3,11 @@
     <tr>
       <th>№</th>
       <th>марка авто</th>
+      <th>номер авто</th>
+      <th>Описание работы</th>
+      <th>стоимость работы</th>
+      <th>общая стоимость работы</th>
+
       <!-- <th>
         <router-link to="/edit">
           <svg
@@ -47,11 +52,37 @@
     <tr v-for="(row, index) in $store.state.rows" :key="index">
       <td>{{ index + 1 }}</td>
       <td>{{ row.mark }}</td>
+      <td>{{ row.num }}</td>
+      <td>
+        <tr v-for="work in row.descWork" :key="work.description">
+          {{
+            work.description
+          }}
+        </tr>
+      </td>
+      <td>
+        <tr v-for="work in row.descWork" :key="work.price">
+          {{
+            work.price
+          }}zł
+        </tr>
+      </td>
+      <td>{{ sumPrice(row.descWork) }}zł</td>
     </tr>
   </table>
 </template>
 
-<script setup></script>
+<script setup>
+let sum = 0;
+function sumPrice(arr) {
+  sum = 0;
+  for (let i = 0; i < arr.length; i++) {
+    sum += arr[i].price;
+    console.log(arr[i].price);
+  }
+  return sum;
+}
+</script>
 
 <style scoped>
 table {
@@ -69,6 +100,10 @@ td {
 }
 td > tr {
   width: 100%;
+  border: none;
   border-bottom: 1px dashed black;
+}
+td > tr:last-child {
+  border: none;
 }
 </style>
