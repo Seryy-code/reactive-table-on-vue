@@ -8,12 +8,29 @@
 </template>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+}
+html {
+  height: 100%;
+}
+body {
+  background: url(./assets/bg.jpg) no-repeat fixed;
+  background-size: cover;
+  min-height: 100vh;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  width: 90%;
+
+  min-height: 95vh;
+  margin: 5vh auto 0 auto;
+  backdrop-filter: blur(15px);
 }
 
 nav {

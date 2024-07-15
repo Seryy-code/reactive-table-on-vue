@@ -15,3 +15,8 @@ export default {
   },
 };
 </script>
+<style>
+img {
+  width: 400px;
+}
+</style>
