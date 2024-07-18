@@ -105,8 +105,8 @@ import { useStore } from "vuex";
 const store = useStore();
 const rows = ref(JSON.parse(JSON.stringify(store.state.rows)));
 console.log(rows.value);
-const newRow = ref();
 
+const newRow = ref();
 const newRowWork = ref();
 const newRowPart = ref();
 
@@ -141,7 +141,6 @@ const deleteRowWork = (index, workIndex) => {
   rows.value[index].descWork.splice(workIndex, 1);
 };
 const deleteRowPart = (index, partIndex) => {
-  // console.log(partIndex);
   rows.value[index].parts.splice(partIndex, 1);
 };
 
