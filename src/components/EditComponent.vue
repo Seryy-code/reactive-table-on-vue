@@ -11,6 +11,7 @@
           <th>стоимость работы</th>
           <th>запчасти</th>
           <th>стоимость запчастей</th>
+          <th>стоимость запчастей 20%</th>
           <th>предоплата</th>
           <th>edit</th>
         </tr>
@@ -57,6 +58,14 @@
               :key="(part.price, partIndex)"
             >
               <input type="number" v-model="part.price" />
+            </tr>
+          </td>
+          <td>
+            <tr
+              v-for="(part, partIndex) in row.parts"
+              :key="(part.price20, partIndex)"
+            >
+              <input type="number" v-model="part.price20" />
               <button @click="deleteRowPart(index, partIndex)">delete</button>
             </tr>
             <tr class="add">
@@ -98,7 +107,7 @@ const newRow = {
   num: "",
   data: "",
   descWork: [{ description: "", price: 0 }],
-  parts: [{ name: "", price: 0 }],
+  parts: [{ name: "", price: 0, price20: 0 }],
   prepaid: 0,
 };
 const newRowWork = {
@@ -108,6 +117,7 @@ const newRowWork = {
 const newRowPart = {
   name: "",
   price: 0,
+  price20: 0,
 };
 
 const addRowShow = () => {
@@ -132,7 +142,7 @@ const sendData = async () => {
     }));
     try {
       const response = await axios.post(
-        "http://localhost:3000/proxy",
+        "https://script.google.com/macros/s/AKfycbxsNR62J90qYW84qz1q6FLYZBhMZRxt_Rw2PICee15gt68riMQ_OeJ9UzU_Cms0RN-7Lg/exec",
         formattedRows
       );
       console.log("Data sent successfully:", response.data);
@@ -172,6 +182,7 @@ td {
   border: 1px solid black;
 }
 table input {
+  width: 125px;
 }
 .container-list ul {
   overflow-y: scroll;

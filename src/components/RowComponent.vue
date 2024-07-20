@@ -3,7 +3,7 @@
     <td>{{ index + 1 }}</td>
     <td>{{ row.mark }}</td>
     <td>{{ row.num }}</td>
-    <td>{{ row.data }}</td>
+    <td style="white-space: nowrap">{{ row.data }}</td>
     <td>
       <tr
         style="white-space: nowrap"
@@ -17,9 +17,8 @@
     </td>
     <td>
       <tr v-for="work in row.descWork" :key="work.price">
-        {{
-          work.price
-        }}zł
+        <span v-if="work.price == ''"> - </span>
+        <span v-else> {{ work.price }}zł </span>
       </tr>
     </td>
 
@@ -37,13 +36,25 @@
     </td>
     <td>
       <tr v-for="part in row.parts" :key="part.price">
-        {{
-          part.price
-        }}zł
+        <span v-if="part.price == ''"> - </span>
+        <span v-else> {{ part.price }}zł </span>
+      </tr>
+    </td>
+    <td>
+      <tr v-for="part in row.parts" :key="part.price20">
+        <span v-if="part.price20 == ''"> - </span>
+        <span v-else> {{ part.price20 }}zł </span>
       </tr>
     </td>
     <td>{{ sumPrice(row.parts) }}zł</td>
-    <td>{{ row.prepaid }}zł</td>
+    <td>{{ sumPrice20(row.parts) }}zł</td>
+
+    <td>
+      <span v-if="row.prepaid == ''"> - </span>
+      <span v-else> {{ row.prepaid }}zł </span>
+    </td>
+    <td>{{ finalPrice(row.descWork, row.parts, row.prepaid) }}zł</td>
+    <td>{{ calculateEarnings(row.descWork, row.parts) }}zł</td>
   </tr>
 </template>
 <script>
@@ -54,9 +65,53 @@ export default {
     sumPrice(arr) {
       let sum = 0;
       for (let i = 0; i < arr.length; i++) {
-        sum += arr[i].price;
+        if (arr[i].price != "") {
+          sum += arr[i].price;
+        }
       }
       return sum;
+    },
+    sumPrice20(arr) {
+      let sum = 0;
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].price20 != "") {
+          sum += arr[i].price20;
+        }
+      }
+      return sum;
+    },
+    finalPrice(arrWork, arrPart, prepaid) {
+      let res = 0;
+      for (let i = 0; i < arrWork.length; i++) {
+        if (arrWork[i].price != "") {
+          res += arrWork[i].price;
+        }
+      }
+      for (let i = 0; i < arrPart.length; i++) {
+        if (arrPart[i].price20 != "") {
+          res += arrPart[i].price20;
+        } else {
+          if (arrPart[i].price != "") {
+            res += arrPart[i].price;
+          }
+        }
+      }
+      res = res - prepaid;
+      return res;
+    },
+    calculateEarnings(arrWork, arrPart) {
+      let res = 0;
+      for (let i = 0; i < arrWork.length; i++) {
+        if (arrWork[i].price != "") {
+          res += arrWork[i].price;
+        }
+      }
+      for (let i = 0; i < arrPart.length; i++) {
+        if (arrPart[i].price20 != "") {
+          res += arrPart[i].price20 - arrPart[i].price;
+        }
+      }
+      return res;
     },
   },
 };
@@ -65,7 +120,7 @@ export default {
 <style scoped>
 td {
   position: relative;
-  padding: 15px;
+  padding: 10px 5px;
   border-collapse: collapse;
 }
 td:before {

@@ -11,7 +11,7 @@ app.use(express.json());
 app.post("/proxy", async (req, res) => {
   try {
     const response = await axios.post(
-      "https://script.google.com/macros/s/AKfycbzXYtEuXkg9CYxc1Uu-hgyeR6FobuR689nBfPpeWJ4D7E-mTtHU8F-o_0HVTZIGMgFUHw/exec",
+      "https://script.google.com/macros/s/AKfycbxY23swUWQ6PPqMP9nl_3aGWdBfthRaePIQIieOeLf1gqzOWpRJEJ9xKhD7mRgZY9bqCw/exec",
       req.body,
       {
         headers: {

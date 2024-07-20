@@ -1,6 +1,6 @@
 <template>
   <div class="edit">
-    <h1>This is edit page</h1>
+    <h1>Cтраница редактирования</h1>
     <EditComponent />
   </div>
 </template>
@@ -15,3 +15,8 @@ export default {
   },
 };
 </script>
+<style>
+h1 {
+  margin-bottom: 50px;
+}
+</style>

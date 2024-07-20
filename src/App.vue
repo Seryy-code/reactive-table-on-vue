@@ -1,8 +1,8 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/edit">Edit</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/">Главная</router-link> |
+    <router-link to="/edit">Редактирование</router-link> |
+    <router-link to="/about">Описание</router-link>
   </nav>
   <router-view />
 </template>
@@ -18,32 +18,36 @@ html {
 body {
   background: url(./assets/bg.jpg) no-repeat fixed;
   background-size: cover;
-  min-height: 100vh;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #000000;
   width: 90%;
 
   min-height: 80vh;
-  padding-bottom: 100px;
-  margin: 5vh auto 0 auto;
-  backdrop-filter: blur(15px);
+  padding-bottom: 50px;
+  margin: 10vh auto 0 auto;
+  backdrop-filter: blur(10px);
 }
 
 nav {
+  text-align: left;
   padding: 30px;
 }
 
 nav a {
+  outline: 2px solid;
+  text-decoration: none;
+  margin: 0 10px;
+  padding: 5px 10px;
   font-weight: bold;
-  color: #2c3e50;
+  color: #000000;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #8795b5;
 }
 </style>

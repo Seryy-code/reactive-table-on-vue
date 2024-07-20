@@ -11,8 +11,12 @@
         <th>общая стоимость работы</th>
         <th>запчасти</th>
         <th>стоимость запчастей</th>
+        <th>стоимость запчастей 20%</th>
         <th>общая цена запчастей</th>
+        <th>общая цена запчастей 20%</th>
         <th>предоплата</th>
+        <th>Конечная цена</th>
+        <th>Сколько заработали</th>
 
         <!-- <th>
         <router-link to="/edit">
@@ -82,7 +86,7 @@ export default {
 
     onMounted(() => {
       const url =
-        "https://script.google.com/macros/s/AKfycbzXYtEuXkg9CYxc1Uu-hgyeR6FobuR689nBfPpeWJ4D7E-mTtHU8F-o_0HVTZIGMgFUHw/exec";
+        "https://script.google.com/macros/s/AKfycbxsNR62J90qYW84qz1q6FLYZBhMZRxt_Rw2PICee15gt68riMQ_OeJ9UzU_Cms0RN-7Lg/exec";
       axios.get(url).then((data) => {
         setRows(data.data);
         // console.log(state.rows);
@@ -155,20 +159,20 @@ export default {
 </script> -->
 <style scoped>
 .container-table {
-  margin: 100px auto 0 auto;
+  margin: 0 auto 0 auto;
   box-shadow: 0px 0px 10px rgb(7, 7, 7);
   border: 1px black solid;
   max-width: 95%;
 }
 table {
-  font-size: 13px;
+  font-size: 12px;
   width: 100%;
   color: rgb(0, 0, 0);
 }
 table,
 th {
   position: relative;
-  padding: 15px;
+  padding: 10px 5px;
   border-collapse: collapse;
 }
 th:before {
@@ -181,13 +185,13 @@ th:before {
 }
 
 table > tr:hover {
-  transform: translate(0%, 0%) scale(1.1);
-  transition: 0.2s;
+  transform: translate(0%, 0%) scale(1.05);
 }
 table > tr:nth-child(1):hover {
   transform: scale(1);
 }
 table > tr {
+  transition: 0.2s;
   background-color: rgb(255, 255, 255);
 }
 table > tr:nth-child(even) {
