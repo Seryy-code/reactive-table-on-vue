@@ -14,7 +14,7 @@
           <th>предоплата</th>
           <th>edit</th>
         </tr>
-        <tr v-for="(row, index) in rows" :key="index">
+        <tr v-for="(row, index) in state.rows" :key="index">
           <td>{{ index + 1 }}</td>
           <td>
             <input type="text" v-model="row.mark" />
@@ -44,7 +44,10 @@
             </tr>
           </td>
           <td>
-            <tr v-for="part in row.parts" :key="part.name">
+            <tr
+              v-for="(part, partIndex) in row.parts"
+              :key="(part.name, partIndex)"
+            >
               <input type="text" v-model="part.name" />
             </tr>
           </td>
@@ -69,85 +72,75 @@
         <button @click="sendData">save</button>
       </div>
     </div>
-
-    <!-- <div class="container-list">
-      <ul>
-        <div><input type="text" placeholder="Поиск" /></div>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-        <li>5</li>
-        <li>6</li>
-        <li>7</li>
-        <li>8</li>
-        <li>9</li>
-        <li>10</li>
-        <li>11</li>
-        <li>12</li>
-        <li>13</li>
-        <li>14</li>
-        <li>15</li>
-        <li>16</li>
-        <li>17</li>
-        <li>18</li>
-        <li>19</li>
-        <li>20</li>
-      </ul>
-    </div> -->
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { useStore } from "vuex";
+import { useRows } from "../stores/storeRows";
+import axios from "axios";
 
-const store = useStore();
-const rows = ref(JSON.parse(JSON.stringify(store.state.rows)));
-console.log(rows.value);
-const newRow = ref();
+const store = useRows();
+const rows = ref(store.state.rows);
 
-const newRowWork = ref();
-const newRowPart = ref();
+const {
+  state,
+  addRow,
+  addRowWork,
+  addRowPart,
+  deleteRow,
+  deleteRowWork,
+  deleteRowPart,
+} = useRows();
+
+const newRow = {
+  mark: "",
+  num: "",
+  data: "",
+  descWork: [{ description: "", price: 0 }],
+  parts: [{ name: "", price: 0 }],
+  prepaid: 0,
+};
+const newRowWork = {
+  description: "",
+  price: 0,
+};
+const newRowPart = {
+  name: "",
+  price: 0,
+};
 
 const addRowShow = () => {
-  newRow.value = {
-    mark: "",
-    num: "",
-    descWork: [{ description: "", price: 0 }],
-  };
-  rows.value.push({ ...newRow.value });
+  addRow({ ...newRow });
 };
-
 const addRowWorkShow = (index) => {
-  newRowWork.value = {
-    description: "",
-    price: 0,
-  };
-  rows.value[index].descWork.push({ ...newRowWork.value });
+  addRowWork({ ...newRowWork }, index);
 };
 const addRowPartShow = (index) => {
-  newRowPart.value = {
-    name: "",
-    price: 0,
-  };
-  rows.value[index].parts.push({ ...newRowPart.value });
+  addRowPart({ ...newRowPart }, index);
 };
 
-const deleteRow = (index) => {
-  rows.value.splice(index, 1);
-};
-const deleteRowWork = (index, workIndex) => {
-  rows.value[index].descWork.splice(workIndex, 1);
-};
-const deleteRowPart = (index, partIndex) => {
-  // console.log(partIndex);
-  rows.value[index].parts.splice(partIndex, 1);
-};
-
-const sendData = () => {
+const sendData = async () => {
   if (confirm("Сохранить изменения?")) {
-    store.state.rows = rows.value;
+    const formattedRows = rows.value.map((row) => ({
+      mark: row.mark,
+      num: row.num,
+      data: row.data,
+      descWork: JSON.stringify(row.descWork),
+      parts: JSON.stringify(row.parts),
+      prepaid: row.prepaid,
+    }));
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/proxy",
+        formattedRows
+      );
+      console.log("Data sent successfully:", response.data);
+      alert("Изменения сохранены!");
+    } catch (error) {
+      console.error("Error sending data:", error.message);
+      alert("Ошибка при сохранении изменений!");
+    }
   }
 };
 </script>

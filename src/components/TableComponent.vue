@@ -55,68 +55,104 @@
         </router-link>
       </th> -->
       </tr>
-      <tr v-for="(row, index) in $store.state.rows" :key="index">
-        <td>{{ index + 1 }}</td>
-        <td>{{ row.mark }}</td>
-        <td>{{ row.num }}</td>
-        <td>{{ row.data }}</td>
-        <td>
-          <tr
-            style="white-space: nowrap"
-            v-for="work in row.descWork"
-            :key="work.description"
-          >
-            {{
-              work.description
-            }}
-          </tr>
-        </td>
-        <td>
-          <tr v-for="work in row.descWork" :key="work.price">
-            {{
-              work.price
-            }}zł
-          </tr>
-        </td>
-
-        <td>{{ sumPrice(row.descWork) }}zł</td>
-        <td>
-          <tr
-            v-for="part in row.parts"
-            :key="part.name"
-            style="white-space: nowrap"
-          >
-            {{
-              part.name
-            }}
-          </tr>
-        </td>
-        <td>
-          <tr v-for="part in row.parts" :key="part.price">
-            {{
-              part.price
-            }}zł
-          </tr>
-        </td>
-        <td>{{ sumPrice(row.parts) }}zł</td>
-        <td>{{ row.prepaid }}zł</td>
-      </tr>
+      <RowComponent
+        v-for="(row, index) in state.rows"
+        :key="row.id || index"
+        :row="row"
+        :index="index"
+      />
     </table>
   </div>
 </template>
 
-<script setup>
-let sum = 0;
-function sumPrice(arr) {
-  sum = 0;
-  for (let i = 0; i < arr.length; i++) {
-    sum += arr[i].price;
-    console.log(arr[i].price);
-  }
-  return sum;
-}
-</script>
+<script>
+import RowComponent from "./RowComponent.vue";
+import axios from "axios";
+import { onMounted } from "vue";
+import { useRows } from "../stores/storeRows";
 
+export default {
+  name: "TableComponent",
+  components: {
+    RowComponent,
+  },
+  props: ["sheet"],
+  setup() {
+    const { state, setRows } = useRows();
+
+    onMounted(() => {
+      const url =
+        "https://script.google.com/macros/s/AKfycbzXYtEuXkg9CYxc1Uu-hgyeR6FobuR689nBfPpeWJ4D7E-mTtHU8F-o_0HVTZIGMgFUHw/exec";
+      axios.get(url).then((data) => {
+        setRows(data.data);
+        // console.log(state.rows);
+      });
+    });
+
+    return { state };
+  },
+  methods: {},
+};
+</script>
+<!-- <script>
+import RowComponent from "./RowComponent.vue";
+
+export default {
+  name: "TableComponent",
+  components: {
+    RowComponent,
+  },
+  props: ["sheet"],
+  data() {
+    return {
+      rows: [],
+      loading: true,
+    };
+  },
+  methods: {
+    loadGapiClient() {
+      return new Promise((resolve, reject) => {
+        if (typeof gapi !== "undefined") {
+          gapi.load("client", {
+            callback: resolve,
+            onerror: reject,
+            timeout: 5000, // 5 seconds
+            ontimeout: reject,
+          });
+        } else {
+          reject(new Error("gapi not loaded"));
+        }
+      });
+    },
+    async initGapiClient() {
+      await gapi.client.init({
+        apiKey: "YOUR_API_KEY", // Замените YOUR_API_KEY на ваш API ключ
+        discoveryDocs: [
+          "https://sheets.googleapis.com/$discovery/rest?version=v4",
+        ],
+      });
+    },
+    async accessSpreadSheet() {
+      try {
+        await this.loadGapiClient();
+        await this.initGapiClient();
+        const response = await gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: "159BewtqQtENsCT68y3yFnXcWyEsYWBDB-Wlds76icOA",
+          range: "Sheet1!A2:E",
+        });
+
+        this.rows = response.result.values;
+        this.loading = false;
+      } catch (error) {
+        console.error("Error accessing Google Sheets:", error);
+      }
+    },
+  },
+  created() {
+    this.accessSpreadSheet();
+  },
+};
+</script> -->
 <style scoped>
 .container-table {
   margin: 100px auto 0 auto;
@@ -130,14 +166,12 @@ table {
   color: rgb(0, 0, 0);
 }
 table,
-th,
-td {
+th {
   position: relative;
   padding: 15px;
   border-collapse: collapse;
 }
-th:before,
-td:before {
+th:before {
   content: "";
   position: absolute;
   height: 60%;
@@ -159,16 +193,7 @@ table > tr {
 table > tr:nth-child(even) {
   background-color: rgb(243, 243, 243);
 }
-th,
-td {
+th {
   height: 20px;
-}
-td > tr {
-  width: 100%;
-  border: none;
-  border-bottom: 1px dashed black;
-}
-td > tr:last-child {
-  border: none;
 }
 </style>

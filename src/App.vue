@@ -28,7 +28,8 @@ body {
   color: #2c3e50;
   width: 90%;
 
-  min-height: 95vh;
+  min-height: 80vh;
+  padding-bottom: 100px;
   margin: 5vh auto 0 auto;
   backdrop-filter: blur(15px);
 }
