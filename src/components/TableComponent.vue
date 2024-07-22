@@ -1,6 +1,50 @@
 <template>
   <div class="container-table">
-    <table id="">
+    <table class="table">
+      <tr class="filters">
+        <td></td>
+        <td>
+          <div>
+            <input
+              type="text"
+              id="input_mark"
+              @keyup="filterCars()"
+              placeholder="Марка..."
+            />
+          </div>
+        </td>
+        <td>
+          <div>
+            <input
+              type="text"
+              id="input_num"
+              @keyup="filterCars()"
+              placeholder="Номер..."
+            />
+          </div>
+        </td>
+        <td>
+          <div>
+            <input
+              type="text"
+              id="input_date"
+              @keyup="filterCars()"
+              placeholder="Дата..."
+            />
+          </div>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
       <tr>
         <th>№</th>
         <th>марка авто</th>
@@ -95,7 +139,75 @@ export default {
 
     return { state };
   },
-  methods: {},
+  methods: {
+    // filterMark() {
+    //   var input = document.getElementById("input_mark");
+    //   var filter = input.value.toUpperCase();
+    //   var rows = document.querySelectorAll(".row");
+    //   rows.forEach((row) => {
+    //     var carMark = row.querySelector(".carMark");
+    //     if (carMark) {
+    //       var txtValue = carMark.textContent || carMark.innerText;
+    //       if (txtValue.toUpperCase().indexOf(filter) > -1) {
+    //         row.style.display = "";
+    //       } else {
+    //         row.style.display = "none";
+    //       }
+    //     }
+    //   });
+    // },
+    // filterNum() {
+    //   var input = document.getElementById("input_num");
+    //   var filter = input.value.toUpperCase();
+    //   var rows = document.querySelectorAll(".row");
+    //   rows.forEach((row) => {
+    //     var carMark = row.querySelector(".carNum");
+    //     if (carMark) {
+    //       var txtValue = carMark.textContent || carMark.innerText;
+    //       if (txtValue.toUpperCase().indexOf(filter) > -1) {
+    //         row.style.display = "";
+    //       } else {
+    //         row.style.display = "none";
+    //       }
+    //     }
+    //   });
+    // },
+    filterCars() {
+      var inputMark = document.getElementById("input_mark");
+      var filterMark = inputMark.value.toUpperCase();
+      var inputNum = document.getElementById("input_num");
+      var filterNum = inputNum.value.toUpperCase();
+      var inputDate = document.getElementById("input_date");
+      var filterDate = inputDate.value.toUpperCase();
+      var rows = document.querySelectorAll(".row");
+
+      rows.forEach((row) => {
+        var carMark = row.querySelector(".carMark");
+        var carNum = row.querySelector(".carNum");
+        var carDate = row.querySelector(".carDate");
+
+        var markText = carMark
+          ? (carMark.textContent || carMark.innerText).toUpperCase()
+          : "";
+        var numText = carNum
+          ? (carNum.textContent || carNum.innerText).toUpperCase()
+          : "";
+        var dateText = carDate
+          ? (carDate.textContent || carDate.innerText).toUpperCase()
+          : "";
+
+        if (
+          markText.indexOf(filterMark) > -1 &&
+          numText.indexOf(filterNum) > -1 &&
+          dateText.indexOf(filterDate) > -1
+        ) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    },
+  },
 };
 </script>
 <!-- <script>
@@ -187,7 +299,8 @@ th:before {
 table > tr:hover {
   transform: translate(0%, 0%) scale(1.05);
 }
-table > tr:nth-child(1):hover {
+table > tr:nth-child(1):hover,
+table > tr:nth-child(2):hover {
   transform: scale(1);
 }
 table > tr {
@@ -199,5 +312,27 @@ table > tr:nth-child(even) {
 }
 th {
   height: 20px;
+}
+table .filters {
+}
+table .filters div {
+  position: relative;
+  width: 100%;
+  height: 50px;
+}
+table .filters input {
+  transform: translate(-50%, 0);
+  left: 50%;
+  position: absolute;
+  transition: 0.3s ease;
+  padding: 10px 5%;
+  margin: 5px 0;
+  width: 85%;
+  top: 0;
+}
+table .filters input:focus {
+  top: -5px;
+  z-index: 1;
+  width: 120%;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="container-table">
+      <h1>{{ props.filter_index }}</h1>
       <table id="dataTable">
         <tr>
           <th>№</th>
@@ -88,7 +89,9 @@
 import { ref } from "vue";
 import { useRows } from "../stores/storeRows";
 import axios from "axios";
+import { defineProps } from "vue";
 
+const props = defineProps(["filter_index"]);
 const store = useRows();
 const rows = ref(store.state.rows);
 
