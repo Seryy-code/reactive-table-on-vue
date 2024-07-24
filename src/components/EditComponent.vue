@@ -1,8 +1,9 @@
 <template>
   <div class="container">
     <div class="container-table">
-      <h1>{{ props.filter_index }}</h1>
+      <!-- <h1>{{ props.filter_index }}</h1> -->
       <table id="dataTable">
+        <FilterCarsComponent />
         <tr>
           <th>№</th>
           <th>марка авто</th>
@@ -16,15 +17,15 @@
           <th>предоплата</th>
           <th>edit</th>
         </tr>
-        <tr v-for="(row, index) in state.rows" :key="index">
+        <tr class="row" v-for="(row, index) in state.rows" :key="index">
           <td>{{ index + 1 }}</td>
-          <td>
+          <td class="carMark">
             <input type="text" v-model="row.mark" />
           </td>
-          <td>
+          <td class="carNum">
             <input type="text" v-model="row.num" />
           </td>
-          <td><input type="text" v-model="row.data" /></td>
+          <td class="carDate"><input type="text" v-model="row.data" /></td>
           <td>
             <tr
               v-for="(work, workIndex) in row.descWork"
@@ -39,7 +40,9 @@
               :key="(work.price, workIndex)"
             >
               <input type="number" v-model="work.price" />
-              <button @click="deleteRowWork(index, workIndex)">delete</button>
+              <button @click="deleteRowWorkShow(index, workIndex)">
+                delete
+              </button>
             </tr>
             <tr class="add">
               <button @click="addRowWorkShow(index)">add</button>
@@ -67,14 +70,16 @@
               :key="(part.price20, partIndex)"
             >
               <input type="number" v-model="part.price20" />
-              <button @click="deleteRowPart(index, partIndex)">delete</button>
+              <button @click="deleteRowPartShow(index, partIndex)">
+                delete
+              </button>
             </tr>
             <tr class="add">
               <button @click="addRowPartShow(index)">add</button>
             </tr>
           </td>
           <td><input type="number" v-model="row.prepaid" /></td>
-          <td><button @click="deleteRow(index)">Delete</button></td>
+          <td><button @click="deleteRowShow(index)">Delete</button></td>
         </tr>
       </table>
       <div class="container-edit">
@@ -85,76 +90,106 @@
   </div>
 </template>
 
-<script setup>
+<script>
+import FilterCarsComponent from "./FilterCarsComponent.vue";
 import { ref } from "vue";
 import { useRows } from "../stores/storeRows";
 import axios from "axios";
-import { defineProps } from "vue";
 
-const props = defineProps(["filter_index"]);
-const store = useRows();
-const rows = ref(store.state.rows);
+export default {
+  name: "EditComponent",
+  components: {
+    FilterCarsComponent,
+  },
+  setup() {
+    const {
+      state,
+      addRow,
+      addRowWork,
+      addRowPart,
+      deleteRow,
+      deleteRowWork,
+      deleteRowPart,
+    } = useRows();
 
-const {
-  state,
-  addRow,
-  addRowWork,
-  addRowPart,
-  deleteRow,
-  deleteRowWork,
-  deleteRowPart,
-} = useRows();
+    const newRow = ref({
+      mark: "",
+      num: "",
+      data: "",
+      descWork: [{ description: "", price: 0 }],
+      parts: [{ name: "", price: 0, price20: 0 }],
+      prepaid: 0,
+    });
 
-const newRow = {
-  mark: "",
-  num: "",
-  data: "",
-  descWork: [{ description: "", price: 0 }],
-  parts: [{ name: "", price: 0, price20: 0 }],
-  prepaid: 0,
-};
-const newRowWork = {
-  description: "",
-  price: 0,
-};
-const newRowPart = {
-  name: "",
-  price: 0,
-  price20: 0,
-};
+    const newRowWork = ref({
+      description: "",
+      price: 0,
+    });
 
-const addRowShow = () => {
-  addRow({ ...newRow });
-};
-const addRowWorkShow = (index) => {
-  addRowWork({ ...newRowWork }, index);
-};
-const addRowPartShow = (index) => {
-  addRowPart({ ...newRowPart }, index);
-};
+    const newRowPart = ref({
+      name: "",
+      price: 0,
+      price20: 0,
+    });
 
-const sendData = async () => {
-  if (confirm("Сохранить изменения?")) {
-    const formattedRows = rows.value.map((row) => ({
-      mark: row.mark,
-      num: row.num,
-      data: row.data,
-      descWork: JSON.stringify(row.descWork),
-      parts: JSON.stringify(row.parts),
-      prepaid: row.prepaid,
-    }));
-    try {
-      const response = await axios.post(
-        "https://script.google.com/macros/s/AKfycbxsNR62J90qYW84qz1q6FLYZBhMZRxt_Rw2PICee15gt68riMQ_OeJ9UzU_Cms0RN-7Lg/exec",
-        formattedRows
-      );
-      console.log("Data sent successfully:", response.data);
-      alert("Изменения сохранены!");
-    } catch (error) {
-      console.error("Error sending data:", error.message);
-      alert("Ошибка при сохранении изменений!");
-    }
-  }
+    const addRowShow = () => {
+      addRow({ ...newRow.value });
+    };
+
+    const addRowWorkShow = (index) => {
+      addRowWork({ ...newRowWork.value }, index);
+    };
+
+    const addRowPartShow = (index) => {
+      addRowPart({ ...newRowPart.value }, index);
+    };
+    const deleteRowShow = (index) => {
+      deleteRow(index);
+    };
+    const deleteRowWorkShow = (index, workIndex) => {
+      deleteRowWork(index, workIndex);
+    };
+    const deleteRowPartShow = (index, partIndex) => {
+      deleteRowPart(index, partIndex);
+    };
+    const sendData = async () => {
+      if (confirm("Сохранить изменения?")) {
+        const formattedRows = state.rows.map((row) => ({
+          mark: row.mark,
+          num: row.num,
+          data: row.data,
+          descWork: JSON.stringify(row.descWork),
+          parts: JSON.stringify(row.parts),
+          prepaid: row.prepaid,
+        }));
+        try {
+          const response = await axios.post(
+            "https://script.google.com/macros/s/AKfycbxsNR62J90qYW84qz1q6FLYZBhMZRxt_Rw2PICee15gt68riMQ_OeJ9UzU_Cms0RN-7Lg/exec",
+            formattedRows
+          );
+          console.log("Data sent successfully:", response.data);
+          alert("Изменения сохранены!");
+        } catch (error) {
+          console.error("Error sending data:", error.message);
+          alert("Ошибка при сохранении изменений!");
+        }
+      }
+    };
+
+    return {
+      state,
+      newRow,
+      newRowWork,
+      newRowPart,
+      addRowShow,
+      addRowWorkShow,
+      addRowPartShow,
+      deleteRowWorkShow,
+      deleteRowPartShow,
+      deleteRowShow,
+      sendData,
+    };
+  },
 };
 </script>
 
@@ -170,7 +205,7 @@ button {
   position: relative;
 }
 table {
-  width: 300px;
+  width: 200px;
   color: black;
 }
 table > tr {
@@ -185,7 +220,7 @@ td {
   border: 1px solid black;
 }
 table input {
-  width: 125px;
+  width: 100px;
 }
 .container-list ul {
   overflow-y: scroll;
@@ -232,5 +267,8 @@ tr td tr.add {
   position: absolute;
   left: -20px;
   bottom: 1px;
+}
+table > tr:hover {
+  transform: translate(0%, 0%) scale(1);
 }
 </style>

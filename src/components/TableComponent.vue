@@ -1,50 +1,7 @@
 <template>
   <div class="container-table">
     <table class="table">
-      <tr class="filters">
-        <td></td>
-        <td>
-          <div>
-            <input
-              type="text"
-              id="input_mark"
-              @keyup="filterCars()"
-              placeholder="Марка..."
-            />
-          </div>
-        </td>
-        <td>
-          <div>
-            <input
-              type="text"
-              id="input_num"
-              @keyup="filterCars()"
-              placeholder="Номер..."
-            />
-          </div>
-        </td>
-        <td>
-          <div>
-            <input
-              type="text"
-              id="input_date"
-              @keyup="filterCars()"
-              placeholder="Дата..."
-            />
-          </div>
-        </td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+      <FilterCarsComponent />
       <tr>
         <th>№</th>
         <th>марка авто</th>
@@ -115,6 +72,8 @@
 
 <script>
 import RowComponent from "./RowComponent.vue";
+import FilterCarsComponent from "./FilterCarsComponent.vue";
+
 import axios from "axios";
 import { onMounted } from "vue";
 import { useRows } from "../stores/storeRows";
@@ -123,90 +82,20 @@ export default {
   name: "TableComponent",
   components: {
     RowComponent,
+    FilterCarsComponent,
   },
   props: ["sheet"],
   setup() {
     const { state, setRows } = useRows();
-
     onMounted(() => {
       const url =
         "https://script.google.com/macros/s/AKfycbxsNR62J90qYW84qz1q6FLYZBhMZRxt_Rw2PICee15gt68riMQ_OeJ9UzU_Cms0RN-7Lg/exec";
       axios.get(url).then((data) => {
         setRows(data.data);
-        // console.log(state.rows);
       });
     });
 
     return { state };
-  },
-  methods: {
-    // filterMark() {
-    //   var input = document.getElementById("input_mark");
-    //   var filter = input.value.toUpperCase();
-    //   var rows = document.querySelectorAll(".row");
-    //   rows.forEach((row) => {
-    //     var carMark = row.querySelector(".carMark");
-    //     if (carMark) {
-    //       var txtValue = carMark.textContent || carMark.innerText;
-    //       if (txtValue.toUpperCase().indexOf(filter) > -1) {
-    //         row.style.display = "";
-    //       } else {
-    //         row.style.display = "none";
-    //       }
-    //     }
-    //   });
-    // },
-    // filterNum() {
-    //   var input = document.getElementById("input_num");
-    //   var filter = input.value.toUpperCase();
-    //   var rows = document.querySelectorAll(".row");
-    //   rows.forEach((row) => {
-    //     var carMark = row.querySelector(".carNum");
-    //     if (carMark) {
-    //       var txtValue = carMark.textContent || carMark.innerText;
-    //       if (txtValue.toUpperCase().indexOf(filter) > -1) {
-    //         row.style.display = "";
-    //       } else {
-    //         row.style.display = "none";
-    //       }
-    //     }
-    //   });
-    // },
-    filterCars() {
-      var inputMark = document.getElementById("input_mark");
-      var filterMark = inputMark.value.toUpperCase();
-      var inputNum = document.getElementById("input_num");
-      var filterNum = inputNum.value.toUpperCase();
-      var inputDate = document.getElementById("input_date");
-      var filterDate = inputDate.value.toUpperCase();
-      var rows = document.querySelectorAll(".row");
-
-      rows.forEach((row) => {
-        var carMark = row.querySelector(".carMark");
-        var carNum = row.querySelector(".carNum");
-        var carDate = row.querySelector(".carDate");
-
-        var markText = carMark
-          ? (carMark.textContent || carMark.innerText).toUpperCase()
-          : "";
-        var numText = carNum
-          ? (carNum.textContent || carNum.innerText).toUpperCase()
-          : "";
-        var dateText = carDate
-          ? (carDate.textContent || carDate.innerText).toUpperCase()
-          : "";
-
-        if (
-          markText.indexOf(filterMark) > -1 &&
-          numText.indexOf(filterNum) > -1 &&
-          dateText.indexOf(filterDate) > -1
-        ) {
-          row.style.display = "";
-        } else {
-          row.style.display = "none";
-        }
-      });
-    },
   },
 };
 </script>
@@ -269,7 +158,7 @@ export default {
   },
 };
 </script> -->
-<style scoped>
+<style>
 .container-table {
   margin: 0 auto 0 auto;
   box-shadow: 0px 0px 10px rgb(7, 7, 7);
