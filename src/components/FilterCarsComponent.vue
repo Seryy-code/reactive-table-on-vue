@@ -21,6 +21,7 @@
         />
       </div>
     </td>
+    <td></td>
     <td>
       <div>
         <input
@@ -31,6 +32,7 @@
         />
       </div>
     </td>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>

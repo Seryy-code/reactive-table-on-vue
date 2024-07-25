@@ -8,6 +8,7 @@
           <th>№</th>
           <th>марка авто</th>
           <th>номер авто</th>
+          <th>vin</th>
           <th>дата</th>
           <th>описание работы</th>
           <th>стоимость работы</th>
@@ -15,6 +16,7 @@
           <th>стоимость запчастей</th>
           <th>стоимость запчастей 20%</th>
           <th>предоплата</th>
+          <th>записи</th>
           <th>edit</th>
         </tr>
         <tr class="row" v-for="(row, index) in state.rows" :key="index">
@@ -25,6 +27,8 @@
           <td class="carNum">
             <input type="text" v-model="row.num" />
           </td>
+          <td><input type="text" v-model="row.vin" /></td>
+
           <td class="carDate"><input type="text" v-model="row.data" /></td>
           <td>
             <tr
@@ -79,6 +83,20 @@
             </tr>
           </td>
           <td><input type="number" v-model="row.prepaid" /></td>
+          <td class="expenses">
+            <div
+              class="expens"
+              v-for="(expens, expensIndex) in row.expenses"
+              :key="(expens.id, expensIndex)"
+            >
+              <input type="text" v-model="expens.name" />
+              <textarea name="" id="" v-model="expens.notes"></textarea>
+              <button @click="deleteExpensShow(index, expensIndex)">
+                Delete
+              </button>
+            </div>
+            <button @click="addExpensShow(index)">add</button>
+          </td>
           <td><button @click="deleteRowShow(index)">Delete</button></td>
         </tr>
       </table>
@@ -104,21 +122,25 @@ export default {
   setup() {
     const {
       state,
+      addExpens,
       addRow,
       addRowWork,
       addRowPart,
       deleteRow,
       deleteRowWork,
       deleteRowPart,
+      deleteExpens,
     } = useRows();
 
     const newRow = ref({
       mark: "",
       num: "",
+      vin: "",
       data: "",
       descWork: [{ description: "", price: 0 }],
       parts: [{ name: "", price: 0, price20: 0 }],
       prepaid: 0,
+      expenses: [{ name: "", notes: "" }],
     });
 
     const newRowWork = ref({
@@ -132,6 +154,11 @@ export default {
       price20: 0,
     });
 
+    const newExpens = ref({
+      name: "",
+      notes: "",
+    });
+
     const addRowShow = () => {
       addRow({ ...newRow.value });
     };
@@ -143,6 +170,9 @@ export default {
     const addRowPartShow = (index) => {
       addRowPart({ ...newRowPart.value }, index);
     };
+    const addExpensShow = (index) => {
+      addExpens({ ...newExpens.value }, index);
+    };
     const deleteRowShow = (index) => {
       deleteRow(index);
     };
@@ -152,19 +182,24 @@ export default {
     const deleteRowPartShow = (index, partIndex) => {
       deleteRowPart(index, partIndex);
     };
+    const deleteExpensShow = (index, expensIndex) => {
+      deleteExpens(index, expensIndex);
+    };
     const sendData = async () => {
       if (confirm("Сохранить изменения?")) {
         const formattedRows = state.rows.map((row) => ({
           mark: row.mark,
           num: row.num,
+          vin: row.vin,
           data: row.data,
           descWork: JSON.stringify(row.descWork),
           parts: JSON.stringify(row.parts),
           prepaid: row.prepaid,
+          expenses: JSON.stringify(row.expenses),
         }));
         try {
           const response = await axios.post(
-            "https://script.google.com/macros/s/AKfycbxsNR62J90qYW84qz1q6FLYZBhMZRxt_Rw2PICee15gt68riMQ_OeJ9UzU_Cms0RN-7Lg/exec",
+            "https://script.google.com/macros/s/AKfycbx1a9P464nhFIqaH_KbsNGTCuWmCoo9hneifr83GZVzq7aoUA3izm2UQzWxvNYhEJeTVg/exec",
             formattedRows
           );
           console.log("Data sent successfully:", response.data);
@@ -184,9 +219,11 @@ export default {
       addRowShow,
       addRowWorkShow,
       addRowPartShow,
+      addExpensShow,
       deleteRowWorkShow,
       deleteRowPartShow,
       deleteRowShow,
+      deleteExpensShow,
       sendData,
     };
   },
@@ -203,6 +240,7 @@ button {
 }
 .container-table {
   position: relative;
+  overflow-x: auto;
 }
 table {
   width: 200px;
@@ -236,11 +274,12 @@ table input {
   border: none;
 }
 .container-edit {
-  position: absolute;
-  top: -65px;
-  right: 0;
+  position: fixed;
+  top: 20%;
+  right: 50%;
+  transform: translate(50%, 50%);
   background-color: rgb(255, 255, 255);
-  border: 1px solid black;
+  box-shadow: 0 0 5px black;
   padding: 10px;
   max-height: 120px;
 }
@@ -270,5 +309,21 @@ tr td tr.add {
 }
 table > tr:hover {
   transform: translate(0%, 0%) scale(1);
+}
+.expenses {
+  display: flex;
+  padding: 0;
+  border: none;
+  border-top: 1px solid black;
+}
+.expens {
+  margin: 0 5px;
+  width: 170px;
+}
+.expens input {
+  width: 100%;
+}
+.expens textarea {
+  max-width: 100%;
 }
 </style>

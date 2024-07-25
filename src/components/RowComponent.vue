@@ -3,6 +3,9 @@
     <td>{{ index + 1 }}</td>
     <td class="carMark">{{ row.mark }}</td>
     <td class="carNum">{{ row.num }}</td>
+    <td class="carVin">
+      <div>{{ row.vin }}</div>
+    </td>
     <td class="carDate" style="white-space: nowrap">{{ row.data }}</td>
     <td>
       <tr
@@ -55,7 +58,7 @@
     </td>
     <td>{{ finalPrice(row.descWork, row.parts, row.prepaid) }}zł</td>
     <td>{{ calculateEarnings(row.descWork, row.parts) }}zł</td>
-    <button class="button_edit">
+    <!-- <button class="button_edit">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlns:cc="http://creativecommons.org/ns#"
@@ -90,14 +93,23 @@
           </g>
         </g>
       </svg>
-    </button>
+    </button> -->
+    <td>
+      <button class="button_note" @click="sendDataTextArea(row.expenses)">
+        open textarea
+      </button>
+    </td>
   </tr>
 </template>
 <script>
 export default {
+  emits: ["sendDataTextArea"],
   name: "RowComponent",
   props: { row: Object, index: Number },
   methods: {
+    sendDataTextArea(dataRow) {
+      this.$emit("sendDataTextArea", dataRow);
+    },
     sumPrice(arr) {
       let sum = 0;
       for (let i = 0; i < arr.length; i++) {
@@ -204,6 +216,35 @@ tr .button_edit {
   align-items: center;
 }
 tr .button_edit:hover {
+  cursor: pointer;
+}
+.carVin {
+  width: 50px;
+  position: relative;
+}
+
+.carVin div {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  padding: 10px 0;
+  width: 90%;
+  z-index: 1;
+  transition: 0.3s ease;
+}
+.carVin:hover div {
+  box-shadow: 0 0 1px black;
+  padding-right: 110px;
+  padding-left: 10px;
+  transition: 0.3s ease;
+}
+.carVin:hover:before {
+  border-right: none;
+}
+button:hover {
   cursor: pointer;
 }
 </style>

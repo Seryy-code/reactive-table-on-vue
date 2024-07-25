@@ -6,6 +6,7 @@
         <th>№</th>
         <th>марка авто</th>
         <th>номер авто</th>
+        <th>vin</th>
         <th>дата</th>
         <th>описание работы</th>
         <th>стоимость работы</th>
@@ -18,6 +19,7 @@
         <th>предоплата</th>
         <th>Конечная цена</th>
         <th>Сколько заработали</th>
+        <th>Расходы</th>
 
         <!-- <th>
         <router-link to="/edit">
@@ -65,17 +67,23 @@
         :key="row.id || index"
         :row="row"
         :index="index"
+        @sendDataTextArea="activeTextArea"
       />
     </table>
+    <TextAreaComponent
+      :getbool="isClicked"
+      :getArrExp="arrExp"
+      @update:isActive="handleUpdateIsActive"
+    />
   </div>
 </template>
 
 <script>
 import RowComponent from "./RowComponent.vue";
 import FilterCarsComponent from "./FilterCarsComponent.vue";
-
+import TextAreaComponent from "./TextAreaComponent.vue";
 import axios from "axios";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useRows } from "../stores/storeRows";
 
 export default {
@@ -83,19 +91,31 @@ export default {
   components: {
     RowComponent,
     FilterCarsComponent,
+    TextAreaComponent,
   },
   props: ["sheet"],
   setup() {
     const { state, setRows } = useRows();
+    const isClicked = ref(false);
+    const arrExp = ref();
+
+    const activeTextArea = (obj) => {
+      isClicked.value = !isClicked.value;
+      arrExp.value = obj;
+      return isClicked, arrExp;
+    };
+    const handleUpdateIsActive = () => {
+      isClicked.value = false;
+    };
     onMounted(() => {
       const url =
-        "https://script.google.com/macros/s/AKfycbxsNR62J90qYW84qz1q6FLYZBhMZRxt_Rw2PICee15gt68riMQ_OeJ9UzU_Cms0RN-7Lg/exec";
+        "https://script.google.com/macros/s/AKfycbx1a9P464nhFIqaH_KbsNGTCuWmCoo9hneifr83GZVzq7aoUA3izm2UQzWxvNYhEJeTVg/exec";
       axios.get(url).then((data) => {
         setRows(data.data);
       });
     });
 
-    return { state };
+    return { state, activeTextArea, isClicked, handleUpdateIsActive, arrExp };
   },
 };
 </script>
@@ -197,6 +217,12 @@ table > tr {
   background-color: rgb(255, 255, 255);
 }
 table > tr:nth-child(even) {
+  background-color: rgb(243, 243, 243);
+}
+table > tr .carVin div {
+  background-color: white;
+}
+table > tr:nth-child(even) .carVin div {
   background-color: rgb(243, 243, 243);
 }
 th {

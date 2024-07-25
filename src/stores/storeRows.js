@@ -24,12 +24,18 @@ export function useRows() {
     addRowPart(newRowPart, index) {
       state.rows[index].parts.push(newRowPart);
     },
+    addExpens(newExpens, index) {
+      state.rows[index].expenses.push(newExpens);
+    },
 
     deleteRowWork(index, workIndex) {
       state.rows[index].descWork.splice(workIndex, 1);
     },
     deleteRowPart(index, partIndex) {
       state.rows[index].parts.splice(partIndex, 1);
+    },
+    deleteExpens(index, expensIndex) {
+      state.rows[index].expenses.splice(expensIndex, 1);
     },
     deleteRow(index) {
       state.rows.splice(index, 1);
