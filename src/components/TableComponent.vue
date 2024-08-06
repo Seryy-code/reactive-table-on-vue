@@ -6,7 +6,7 @@
         <th>№</th>
         <th>марка авто</th>
         <th>номер авто</th>
-        <th>vin</th>
+        <th>vin и номер телефона</th>
         <th>дата</th>
         <th>описание работы</th>
         <th>стоимость работы</th>
@@ -109,7 +109,7 @@ export default {
     };
     onMounted(() => {
       const url =
-        "https://script.google.com/macros/s/AKfycbx1a9P464nhFIqaH_KbsNGTCuWmCoo9hneifr83GZVzq7aoUA3izm2UQzWxvNYhEJeTVg/exec";
+        "https://script.google.com/macros/s/AKfycbxuvJBQcruwrCtb_OWzxSnjI3KKxeddGUb2AYFUkZxiOsilCfuudRJJkStWGr-JQbyIaA/exec";
       axios.get(url).then((data) => {
         setRows(data.data);
       });
@@ -184,6 +184,7 @@ export default {
   box-shadow: 0px 0px 10px rgb(7, 7, 7);
   border: 1px black solid;
   max-width: 95%;
+  overflow-x: auto;
 }
 table {
   font-size: 12px;
@@ -205,13 +206,6 @@ th:before {
   border-right: 1px solid rgba(90, 90, 90, 0.459);
 }
 
-table > tr:hover {
-  transform: translate(0%, 0%) scale(1.05);
-}
-table > tr:nth-child(1):hover,
-table > tr:nth-child(2):hover {
-  transform: scale(1);
-}
 table > tr {
   transition: 0.2s;
   background-color: rgb(255, 255, 255);

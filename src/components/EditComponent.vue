@@ -8,7 +8,7 @@
           <th>№</th>
           <th>марка авто</th>
           <th>номер авто</th>
-          <th>vin</th>
+          <th>vin и номер телефона</th>
           <th>дата</th>
           <th>описание работы</th>
           <th>стоимость работы</th>
@@ -27,7 +27,10 @@
           <td class="carNum">
             <input type="text" v-model="row.num" />
           </td>
-          <td><input type="text" v-model="row.vin" /></td>
+          <td>
+            <input type="text" v-model="row.vin" />
+            <input type="text" v-model="row.tel" />
+          </td>
 
           <td class="carDate"><input type="text" v-model="row.data" /></td>
           <td>
@@ -136,6 +139,7 @@ export default {
       mark: "",
       num: "",
       vin: "",
+      tel: "",
       data: "",
       descWork: [{ description: "", price: 0 }],
       parts: [{ name: "", price: 0, price20: 0 }],
@@ -191,6 +195,7 @@ export default {
           mark: row.mark,
           num: row.num,
           vin: row.vin,
+          tel: row.tel,
           data: row.data,
           descWork: JSON.stringify(row.descWork),
           parts: JSON.stringify(row.parts),
@@ -199,7 +204,7 @@ export default {
         }));
         try {
           const response = await axios.post(
-            "https://script.google.com/macros/s/AKfycbx1a9P464nhFIqaH_KbsNGTCuWmCoo9hneifr83GZVzq7aoUA3izm2UQzWxvNYhEJeTVg/exec",
+            "https://script.google.com/macros/s/AKfycbxuvJBQcruwrCtb_OWzxSnjI3KKxeddGUb2AYFUkZxiOsilCfuudRJJkStWGr-JQbyIaA/exec",
             formattedRows
           );
           console.log("Data sent successfully:", response.data);

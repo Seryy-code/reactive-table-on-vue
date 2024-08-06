@@ -4,7 +4,13 @@
     <td class="carMark">{{ row.mark }}</td>
     <td class="carNum">{{ row.num }}</td>
     <td class="carVin">
-      <div>{{ row.vin }}</div>
+      <div v-if="row.vin == '1'">-</div>
+      <div class="active vin" v-else>
+        vin: {{ row.vin }}<br />
+        tel: {{ row.tel }}
+      </div>
+      <!-- <div v-if="row.tel == ''">-</div>
+      <div class="active tel" v-else>{{ row.tel }}</div> -->
     </td>
     <td class="carDate" style="white-space: nowrap">{{ row.data }}</td>
     <td>
@@ -96,7 +102,45 @@
     </button> -->
     <td>
       <button class="button_note" @click="sendDataTextArea(row.expenses)">
-        open textarea
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          width="24"
+          height="24"
+          viewBox="0 0 128 128"
+        >
+          <g>
+            <g>
+              <path
+                d="M101.53,92.93L82.56,73.98c13.78-18.01,12.49-43.86-3.99-60.34c-17.94-17.93-47.02-17.93-64.97,0 c-17.93,17.94-17.93,47.03,0,64.96c16.48,16.47,42.34,17.78,60.35,3.99l18.97,18.96L101.53,92.93z"
+                style="fill: #78a3ad"
+              />
+              <path
+                d="M20.44,71.77c-14.16-14.17-14.16-37.15,0-51.31c14.17-14.17,37.12-14.16,51.3,0 c14.16,14.16,14.16,37.12,0,51.31C57.55,85.93,34.6,85.93,20.44,71.77z"
+                style="fill: #ffffff"
+              />
+            </g>
+            <g>
+              <defs>
+                <path
+                  id="SVGID_1_"
+                  d="M126.53,110.53L101,84.94c-6.5-6.5-22.18,9.77-15.97,15.97c0.03,0.03,25.53,25.59,25.53,25.59 c2.64,2.63,8.36,1.19,12.75-3.23C127.72,118.87,129.16,113.16,126.53,110.53z"
+                />
+              </defs>
+              <use
+                style="overflow: visible; fill: #f79329"
+                xlink:href="#SVGID_1_"
+              />
+              <clipPath id="SVGID_2_">
+                <use style="overflow: visible" xlink:href="#SVGID_1_" />
+              </clipPath>
+              <path
+                d="M111.23,125.77c0.18-2.04,1.51-4.45,2.37-5.81 c2.57-4.07,5.8-7.44,10.62-8.72c4.9-1.31,5.39,2.38,4.22,6.12c-1.41,4.51-4.22,7.9-8.36,10.27c-0.97,0.56-2.26,1.35-3.38,1.52 C113.96,129.54,110.94,129.19,111.23,125.77z"
+                style="clip-path: url(#SVGID_2_); fill: #855c52"
+              />
+            </g>
+          </g>
+        </svg>
       </button>
     </td>
   </tr>
@@ -222,8 +266,10 @@ tr .button_edit:hover {
   width: 50px;
   position: relative;
 }
-
-.carVin div {
+.carVin .vin {
+  top: -10px;
+}
+.carVin .active {
   text-align: center;
   position: absolute;
   top: 50%;
@@ -235,7 +281,7 @@ tr .button_edit:hover {
   z-index: 1;
   transition: 0.3s ease;
 }
-.carVin:hover div {
+.carVin:hover .active {
   box-shadow: 0 0 1px black;
   padding-right: 110px;
   padding-left: 10px;
@@ -246,5 +292,10 @@ tr .button_edit:hover {
 }
 button:hover {
   cursor: pointer;
+}
+.button_note {
+  border: none;
+  background: none;
+  height: 28px;
 }
 </style>
