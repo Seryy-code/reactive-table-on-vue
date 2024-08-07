@@ -20,6 +20,7 @@
         <th>Конечная цена</th>
         <th>Сколько заработали</th>
         <th>Расходы</th>
+        <th>Статус оплаты</th>
 
         <!-- <th>
         <router-link to="/edit">
@@ -109,9 +110,10 @@ export default {
     };
     onMounted(() => {
       const url =
-        "https://script.google.com/macros/s/AKfycbxuvJBQcruwrCtb_OWzxSnjI3KKxeddGUb2AYFUkZxiOsilCfuudRJJkStWGr-JQbyIaA/exec";
+        "https://script.google.com/macros/s/AKfycbwgmmvyRVSpV7H7XUFiR5Ofj02esjHVWuUpwvx2YOQi0ijOUrGZc1bMtFX1FSrwNC_D-Q/exec";
       axios.get(url).then((data) => {
         setRows(data.data);
+        console.log(data.data);
       });
     });
 

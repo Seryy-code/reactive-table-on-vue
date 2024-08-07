@@ -40,5 +40,8 @@ export function useRows() {
     deleteRow(index) {
       state.rows.splice(index, 1);
     },
+    changeStatePaid(index) {
+      state.rows[index].paidstate = !state.rows[index].paidstate;
+    },
   };
 }

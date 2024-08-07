@@ -17,6 +17,7 @@
           <th>стоимость запчастей 20%</th>
           <th>предоплата</th>
           <th>записи</th>
+          <th>Статус оплаты</th>
           <th>edit</th>
         </tr>
         <tr class="row" v-for="(row, index) in state.rows" :key="index">
@@ -100,6 +101,11 @@
             </div>
             <button @click="addExpensShow(index)">add</button>
           </td>
+          <td>
+            <button @click="changeStatePaidShow(index)">
+              <span v-if="!row.paidstate">не </span>оплачено
+            </button>
+          </td>
           <td><button @click="deleteRowShow(index)">Delete</button></td>
         </tr>
       </table>
@@ -125,6 +131,7 @@ export default {
   setup() {
     const {
       state,
+      changeStatePaid,
       addExpens,
       addRow,
       addRowWork,
@@ -145,6 +152,7 @@ export default {
       parts: [{ name: "", price: 0, price20: 0 }],
       prepaid: 0,
       expenses: [{ name: "", notes: "" }],
+      paidstate: false,
     });
 
     const newRowWork = ref({
@@ -162,7 +170,10 @@ export default {
       name: "",
       notes: "",
     });
-
+    const changeStatePaidShow = (index) => {
+      changeStatePaid(index);
+      console.log();
+    };
     const addRowShow = () => {
       addRow({ ...newRow.value });
     };
@@ -201,14 +212,14 @@ export default {
           parts: JSON.stringify(row.parts),
           prepaid: row.prepaid,
           expenses: JSON.stringify(row.expenses),
+          paidstate: row.paidstate,
         }));
         try {
           const response = await axios.post(
-            "https://script.google.com/macros/s/AKfycbxuvJBQcruwrCtb_OWzxSnjI3KKxeddGUb2AYFUkZxiOsilCfuudRJJkStWGr-JQbyIaA/exec",
+            "https://script.google.com/macros/s/AKfycbwgmmvyRVSpV7H7XUFiR5Ofj02esjHVWuUpwvx2YOQi0ijOUrGZc1bMtFX1FSrwNC_D-Q/exec",
             formattedRows
           );
           console.log("Data sent successfully:", response.data);
-          alert("Изменения сохранены!");
         } catch (error) {
           console.error("Error sending data:", error.message);
           alert("Ошибка при сохранении изменений!");
@@ -221,6 +232,7 @@ export default {
       newRow,
       newRowWork,
       newRowPart,
+      changeStatePaidShow,
       addRowShow,
       addRowWorkShow,
       addRowPartShow,

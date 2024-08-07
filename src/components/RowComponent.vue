@@ -143,9 +143,16 @@
         </svg>
       </button>
     </td>
+    <td class="payment-state">
+      <div class="container-payment-state">
+        <button class="state" :class="{ paid: row.paidstate }"></button>
+      </div>
+    </td>
   </tr>
 </template>
 <script>
+// import axios from "axios";
+
 export default {
   emits: ["sendDataTextArea"],
   name: "RowComponent",
@@ -205,6 +212,22 @@ export default {
       }
       return res;
     },
+    // async sendPaidStateUpdate(index, currentPaidState) {
+    //   if (confirm("Изменить состояние оплаты?")) {
+    //     const updatedPaidState = !currentPaidState;
+    //     try {
+    //       const response = await axios.post(
+    //         "https://script.google.com/macros/s/AKfycbwNbZapni0j6p8OmzQGZ1AbA1ae_LmX4KbfJm6ywM-w04aXZH15qaxOxXd_tqRq_eLb/exec",
+    //         { index, paidstate: updatedPaidState }
+    //       );
+    //       console.log("Data sent successfully:", response.data);
+    //       this.$emit("update:row", { index, updatedPaidState });
+    //     } catch (error) {
+    //       console.error("Error sending data:", error.message);
+    //       alert("Ошибка при обновлении состояния оплаты!");
+    //     }
+    //   }
+    // },
     // Navigate(index) {
     //   this.$router.push({ name: "edit", params: { filter_index: index } });
     // },
@@ -229,7 +252,7 @@ td:before {
   right: 0;
   border-right: 1px solid rgba(90, 90, 90, 0.459);
 }
-td:nth-last-child(2):before {
+td:nth-last-child(1):before {
   border: none;
 }
 td > tr {
@@ -297,5 +320,33 @@ button:hover {
   border: none;
   background: none;
   height: 28px;
+}
+.payment-state {
+  padding: 0;
+}
+.payment-state .container-payment-state {
+  display: flex;
+  justify-content: space-evenly;
+  margin: auto;
+  height: 18px;
+}
+.payment-state .container-payment-state .state {
+  border: none;
+  background-color: red;
+  border-radius: 50%;
+  box-shadow: 0 0 3px black;
+  width: 17px;
+  height: 17px;
+  transition: 0.2s ease;
+  cursor: default;
+}
+/* .payment-state .container-payment-state .state:hover {
+  width: 18px;
+  height: 18px;
+  box-shadow: 0 0 5px black;
+  cursor: pointer;
+} */
+.payment-state .container-payment-state > .paid {
+  background-color: green;
 }
 </style>
