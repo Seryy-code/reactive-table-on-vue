@@ -185,7 +185,7 @@ export default {
   margin: 0 auto 0 auto;
   box-shadow: 0px 0px 10px rgb(7, 7, 7);
   border: 1px black solid;
-  max-width: 95%;
+  max-width: 100%;
   overflow-x: auto;
 }
 table {

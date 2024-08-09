@@ -25,15 +25,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #000000;
-  width: 90%;
-
-  min-height: 80vh;
+  width: 100%;
+  height: 10000px;
   padding-bottom: 50px;
   margin: 10vh auto 0 auto;
   backdrop-filter: blur(10px);
 }
 
 nav {
+  position: sticky;
+  z-index: 5;
+  top: 0;
+  width: 420px;
   text-align: left;
   padding: 30px;
 }
@@ -45,6 +48,8 @@ nav a {
   padding: 5px 10px;
   font-weight: bold;
   color: #000000;
+
+  background-color: rgb(94, 94, 94);
 }
 
 nav a.router-link-exact-active {
