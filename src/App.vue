@@ -26,7 +26,6 @@ body {
   text-align: center;
   color: #000000;
   width: 100%;
-  height: 10000px;
   padding-bottom: 50px;
   margin: 10vh auto 0 auto;
   backdrop-filter: blur(10px);

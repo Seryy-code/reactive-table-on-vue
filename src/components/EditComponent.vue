@@ -1,4 +1,8 @@
 <template>
+  <div class="container-edit">
+    <button @click="addRowShow">add row</button>
+    <button @click="sendData">save</button>
+  </div>
   <div class="container">
     <div class="container-table">
       <!-- <h1>{{ props.filter_index }}</h1> -->
@@ -109,10 +113,6 @@
           <td><button @click="deleteRowShow(index)">Delete</button></td>
         </tr>
       </table>
-      <div class="container-edit">
-        <button @click="addRowShow">add row</button>
-        <button @click="sendData">save</button>
-      </div>
     </div>
   </div>
 </template>
@@ -256,7 +256,6 @@ button {
   justify-content: space-around;
 }
 .container-table {
-  position: relative;
   overflow-x: auto;
 }
 table {
@@ -291,13 +290,16 @@ table input {
   border: none;
 }
 .container-edit {
-  position: fixed;
-  top: 20%;
-  right: 50%;
-  transform: translate(50%, 50%);
+  z-index: 2;
+  position: sticky;
+  display: flex;
+  top: 15px;
+  left: 44%;
+  justify-content: space-around;
   background-color: rgb(255, 255, 255);
   box-shadow: 0 0 5px black;
   padding: 10px;
+  width: 150px;
   max-height: 120px;
 }
 .container-edit > * {
